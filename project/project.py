@@ -50,10 +50,11 @@ def calculate_sine_wave(frequency,amplitude,audio_params):
         if amplitude < 0.0:
             amplitude = 0.0
         values = []
+        f_out = open("data.txt",'w')
         for i in range(0,audio_params[2]*4):
             t = float(i)/float(audio_params[2])
             values.append(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))
-            values.append(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))
+            f_out.write(str(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))+'\t'+str(t)+'\n')
 
 
         return values
@@ -186,9 +187,7 @@ def main():
         if wave_type == 4:
             data = calculate_sawtooth_wave(frequency,amplitude,audio_params)
 
-        with open("data.txt",'w') as f_out:
-            for i in data:
-                f_out.write(string(i))
+
         generate_wav_file(data,audio_params,sys.argv[3])
     else:
         sys.exit("Incorrect amount of arguments")
