@@ -136,9 +136,12 @@ def calculate_sawtooth_wave(frequency,amplitude,audio_params):
 
 def convert_to_16bit(data):
     _16bit_val = []
+    out = open("data.txt",'w')
     for i in range(0,len(data)):
-        data[i]*=3276.0 # scaling values to 16 bit by multiplying it by max amplitude
-        _16bit_val.append( struct.pack("f", data[i]))
+        data[i]*=32767.0 # scaling values to 16 bit by multiplying it by max amplitude
+        data[i]=round(data[i])
+        _16bit_val.append( struct.pack('<h', data[i]))
+        out.write(str(data[i])+'\t'+str(_16bit_val[i])+'\n')
     return _16bit_val
 
 
