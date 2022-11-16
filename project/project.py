@@ -19,6 +19,8 @@ import struct
 #   Audio output config   #
 ###########################
 
+duration = 2     # in seconds
+
 num_channels = 2
 sample_width = 4
 samplerate = 44100
@@ -54,7 +56,7 @@ def calculate_sine_wave(frequency,amplitude,audio_params):
               
         values = []
 
-        for i in range(0,audio_params[2]*4):
+        for i in range(0,audio_params[2]*4*duration):
             t = float(i)/float(audio_params[2])
             values.append(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))
 
@@ -78,7 +80,7 @@ def calculate_square_wave(frequency,amplitude,audio_params):
             amplitude = 1       
 
         values = []
-        for i in range(0,audio_params[2]*4):
+        for i in range(0,audio_params[2]*4*duration):
             values.append(sign(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*float(i)/float(audio_params[2]))))
 
         return values
@@ -99,7 +101,7 @@ def calculate_triangle_wave(frequency,amplitude,audio_params):
             amplitude = 1       
 
         values = []
-        for i in range(0,audio_params[2]*4):
+        for i in range(0,audio_params[2]*4*duration):
             t = float(i)/float(audio_params[2])
             values.append(4.0*frequency*(t-pow(2*frequency,-1)*math.floor(2*t*frequency+0.5))*pow(-1,math.floor(2*t*frequency+0.5)))
 
@@ -121,7 +123,7 @@ def calculate_sawtooth_wave(frequency,amplitude,audio_params):
             amplitude = 1       
 
         values = []
-        for i in range(0,audio_params[2]*4):
+        for i in range(0,audio_params[2]*4*duration):
             t = float(i)/float(audio_params[2])
             values.append(2*(t*frequency-math.floor(0.5+t*frequency)))
 
