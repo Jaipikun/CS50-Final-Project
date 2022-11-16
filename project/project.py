@@ -65,7 +65,7 @@ def calculate_sine_wave(frequency,amplitude,audio_params):
         return values
 
     except ValueError:
-        sys.exit("Error")
+        sys.exit("Error while calculating wave")
 
 
 ###############
@@ -86,7 +86,7 @@ def calculate_square_wave(frequency,amplitude,audio_params):
         return values
 
     except ValueError:
-        sys.exit("Error")
+        sys.exit("Error while calculating wave")
 
 #################
 # Triangle wave #
@@ -108,7 +108,7 @@ def calculate_triangle_wave(frequency,amplitude,audio_params):
         return values
 
     except ValueError:
-        sys.exit("Error")
+        sys.exit("Error while calculating wave")
 
 #################
 # Sawtooth wave #
@@ -130,36 +130,45 @@ def calculate_sawtooth_wave(frequency,amplitude,audio_params):
         return values
 
     except ValueError:
-        sys.exit("Error")
+        sys.exit("Error while calculating wave")
 
 #####################################
 #   Additional / helper functions   #
 #####################################
 
 def convert_to_16bit(data):
-    _16bit_val = []
+    try:
+        _16bit_val = []
 
-    for i in range(0,len(data)):
-        data[i]*=32767.0 # scaling values to 16 bit by multiplying it by max amplitude
-        data[i]=round(data[i])
-        _16bit_val.append( struct.pack('<h', data[i]))
-    return _16bit_val
+        for i in range(0,len(data)):
+            data[i]*=32767.0 # scaling values to 16 bit by multiplying it by max amplitude
+            data[i]=round(data[i])
+            _16bit_val.append( struct.pack('<h', data[i]))
+        return _16bit_val
+    except TypeError:
+        sys.exit("Error while converting data")
 
 
 def generate_wav_file(data,audio_params,name):
-    with wave.open(name+".wav",'wb') as audio:
-        audio.setparams(audio_params)
-        data = convert_to_16bit(data)
-        for i in data:
-            audio.writeframesraw(i)
+    try:
+        with wave.open(name+".wav",'wb') as audio:
+            audio.setparams(audio_params)
+            data = convert_to_16bit(data)
+            for i in data:
+                audio.writeframesraw(i)
+    except wave.Error:
+        sys.exit("Something wrong with .wav file")
 
 
 def sign(value):
-    if value>0:
-        return 1
-    if value<0:
-        return -1
-    return 0
+    try:
+        if value>0:
+            return 1
+        if value<0:
+            return -1
+        return 0
+    except TypeError:
+        sys.exit("Nan")
 
 
 ###########################
