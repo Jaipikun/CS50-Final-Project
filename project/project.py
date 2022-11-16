@@ -49,12 +49,15 @@ def calculate_sine_wave(frequency,amplitude,audio_params):
     try:
         if amplitude < 0.0:
             amplitude = 0.0
+        if amplitude > 1.0:
+            amplitude = 1        
+              
         values = []
-        f_out = open("data.txt",'w')
+
         for i in range(0,audio_params[2]*4):
             t = float(i)/float(audio_params[2])
             values.append(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))
-            f_out.write(str(float(amplitude)*math.sin(2.0*math.pi*float(frequency)*t))+'\t'+str(t)+'\n')
+
 
 
         return values
@@ -71,6 +74,8 @@ def calculate_square_wave(frequency,amplitude,audio_params):
     try:
         if amplitude < 0.0:
             amplitude = 0.0
+        if amplitude > 1.0:
+            amplitude = 1       
 
         values = []
         for i in range(0,audio_params[2]*4):
@@ -90,11 +95,13 @@ def calculate_triangle_wave(frequency,amplitude,audio_params):
     try:
         if amplitude < 0.0:
             amplitude = 0.0
+        if amplitude > 1.0:
+            amplitude = 1       
 
         values = []
         for i in range(0,audio_params[2]*4):
             t = float(i)/float(audio_params[2])
-            values.append(4.0*frequency*(t-math.floor(2*t*frequency+0.5))*pow(-1,math.floor(2*t*frequency+0.5)))
+            values.append(4.0*frequency*(t-pow(2*frequency,-1)*math.floor(2*t*frequency+0.5))*pow(-1,math.floor(2*t*frequency+0.5)))
 
         return values
 
@@ -110,6 +117,8 @@ def calculate_sawtooth_wave(frequency,amplitude,audio_params):
     try:
         if amplitude < 0.0:
             amplitude = 0.0
+        if amplitude > 1.0:
+            amplitude = 1       
 
         values = []
         for i in range(0,audio_params[2]*4):
@@ -158,10 +167,10 @@ def main():
 
 
         try:
-            if int(sys.argv[2])<0:
+            if float(sys.argv[2])<0:
                 sys.exit("Incorrect frequency")
 
-            frequency = 0.5*float(sys.argv[2]) # real-life frequency is a double of this value
+            frequency = float(sys.argv[2])
         except (ValueError,TypeError):
             sys.exit("Incorrect frequency")
 
