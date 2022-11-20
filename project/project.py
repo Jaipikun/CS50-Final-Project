@@ -133,13 +133,52 @@ def calculate_sawtooth_wave(frequency,amplitude,audio_params):
         sys.exit("Error while calculating wave")
 
 #####################################
+#       Combine audio files         #
+#####################################
+
+def combine(file1_path,file2_path):
+    audio_params_1 = []
+    audio_params_2 = []
+    data_1 = []
+    data_2 = []
+    with wave.open(file1_path,'rb') as file1:
+        audio_params_1 = file1.getparams()
+        data_1 = file1.readframes(audio_params_1[3])
+
+    with wave.open(file2_path,'rb') as file2:
+        audio_params_2 = file2.getparams()
+        data_2 = file2.readframes(audio_params_2[3])
+
+    for i in range(len(audio_params_1)):
+        if audio_params_1[i]!=audio_params_2[i]:
+            return "Incompatible audio files"
+
+    max_1 = max(data_1)
+    max_2 = max(data_2)
+
+
+    new_data = []
+
+
+    for i in range(len(data_1)):
+        new_data.append(((data_1[i]/max_1)+(data_2[i]/max_2))*0.5)
+        
+
+    generate_wav_file(new_data,audio_params_1,"Combined_Audio")
+
+    return "Files combined successfully!"
+
+
+
+
+
+#####################################
 #   Additional / helper functions   #
 #####################################
 
 def convert_to_16bit(data):
     try:
         _16bit_val = []
-
         for i in range(0,len(data)):
             data[i]*=32767.0 # scaling values to 16 bit by multiplying it by max amplitude
             data[i]=round(data[i])
@@ -211,8 +250,15 @@ def main():
 
 
         generate_wav_file(data,audio_params,sys.argv[3])
+    
+    elif len(sys.argv) == 3:
+        file_path1 = sys.argv[1]
+        file_path2 = sys.argv[2]
+        combine(file_path1,file_path2)
+
     else:
         sys.exit("Incorrect amount of arguments")
+
     return 0
 
 
