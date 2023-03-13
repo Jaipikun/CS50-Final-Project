@@ -144,6 +144,8 @@ def combine(file1_path,file2_path):
     with wave.open(file1_path,'rb') as file1:
         audio_params_1 = file1.getparams()
         data_1 = file1.readframes(audio_params_1[3])
+        with open("data.txt",'w') as data:
+            data.write(str(data_1))
 
     with wave.open(file2_path,'rb') as file2:
         audio_params_2 = file2.getparams()
@@ -152,7 +154,7 @@ def combine(file1_path,file2_path):
     for i in range(len(audio_params_1)):
         if audio_params_1[i]!=audio_params_2[i]:
             return "Incompatible audio files"
-
+    convert_from_16bit(data_1)
     max_1 = max(data_1)
     max_2 = max(data_2)
 
@@ -185,6 +187,18 @@ def convert_to_16bit(data):
             _16bit_val.append( struct.pack('<h', data[i]))
         return _16bit_val
     except TypeError:
+        sys.exit("Error while converting data")
+
+
+def convert_from_16bit(data):
+    #try:
+        converted = []
+        for i in data:
+            converted.append(struct.unpack("<h",i))
+        print(converted[0])
+        return converted
+
+    #except TypeError:
         sys.exit("Error while converting data")
 
 
